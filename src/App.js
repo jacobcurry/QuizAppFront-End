@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LoginForm from "./components/LoginForm";
 import NewUserForm from "./components/NewUserForm";
 import axios from "axios";
@@ -11,41 +11,52 @@ const App = () => {
   const [toggleLogout, setToggleLogout] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
 
-  const handleCreateUser = (userObj) => {
-    axios
-      .post("https://lit-anchorage-15647.herokuapp.com/createaccount", userObj)
-      .then((response) => {
-        if (response.data.user.email) {
-          console.log(response);
-          setToggleError(false);
-          setErrorMessage("");
-          setCurrentUser(response.data.user);
-          handleToggleLogout();
-        } else {
-          setErrorMessage(response.data);
-          setToggleError(true);
-        }
-      });
+  const axiosInstance = axios.create({
+    baseURL: "https://lit-anchorage-15647.herokuapp.com/",
+    header: { "Access-Control-Allow_Origin": "*" },
+  });
+
+  const handleCreateUser = async (userObj) => {
+    const response = await axiosInstance.post("createaccount", userObj, {
+      withCredentials: true,
+    });
+    console.log(response);
+    // axios
+    //   .post(
+    //     "https://lit-anchorage-15647.herokuapp.com/createaccount",
+    //     userObj,
+    //     { withCredentials: true }
+    //   )
+    //   .then((response) => {
+    //     console.log(response);
+    // if (response.data) {
+    //   console.log("hi");
+    //   console.log(response);
+    //   setCurrentUser(response.data);
+    //   handleToggleLogout();
+    // }
+    //});
   };
 
-  const handleLogin = (userObj) => {
-    console.log(userObj);
-    axios
-      .put("https://lit-anchorage-15647.herokuapp.com/login", userObj)
-      .then((response) => {
-        if (response.data.user.email) {
-          console.log(response);
-          setToggleError(false);
-
-          setErrorMessage("");
-          setCurrentUser(response.data.user);
-          handleToggleLogout();
-        } else {
-          console.log(response);
-          setToggleError(true);
-          setErrorMessage(response.data);
-        }
-      });
+  const handleLogin = async (userObj) => {
+    const response = await axiosInstance.put("login", userObj, {
+      withCredentials: true,
+    });
+    console.log(response);
+    // console.log(userObj);
+    // axios
+    //   .put("https://lit-anchorage-15647.herokuapp.com/login", userObj, {
+    //     withCredentials: true,
+    //   })
+    //   .then((response) => {
+    //     console.log(response);
+    //     if (response.data.user) {
+    //       console.log("hi");
+    //       console.log(response);
+    //       setCurrentUser(response.data.user);
+    //       handleToggleLogout();
+    //     }
+    //   });
   };
 
   const handleLogout = () => {
@@ -70,6 +81,16 @@ const App = () => {
     }
   };
 
+  useEffect(() => {
+    axios
+      .get("https://lit-anchorage-15647.herokuapp.com/", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response);
+      });
+  }, []);
+
   return (
     <div className="App">
       <div>
@@ -84,17 +105,16 @@ const App = () => {
                 handleLogin={handleLogin}
                 toggleError={toggleError}
                 errorMessage={errorMessage}
+                handleToggleForm={handleToggleForm}
               />
             ) : (
               <NewUserForm
                 handleCreateUser={handleCreateUser}
                 toggleError={toggleError}
                 errorMessage={errorMessage}
+                handleToggleForm={handleToggleForm}
               />
             )}
-            <button onClick={handleToggleForm} className="accountBtn">
-              {toggleLogin ? "Need an account?" : "Already have an account?"}
-            </button>
           </div>
         )}
       </div>

@@ -1,10 +1,20 @@
 import React, { useState } from "react";
-import "../App.css";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
 
-const App = (props) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+const theme = createTheme();
+
+export default function SignIn(props) {
   const triggerLogin = (event) => {
     event.preventDefault();
     let userObj = {
@@ -14,33 +24,80 @@ const App = (props) => {
     props.handleLogin(userObj);
   };
 
-  return (
-    <div className="formContainer">
-      <h1 className="formTitle">Login</h1>
-      <form onSubmit={triggerLogin} className="inputForm">
-        <input
-          type="text"
-          placeholder="email"
-          className="textInput"
-          onChange={(event) => {
-            setEmail(event.target.value);
-          }}
-        />
-        <input
-          type="password"
-          placeholder="password"
-          className="textInput"
-          onChange={(event) => {
-            setPassword(event.target.value);
-          }}
-        />
-        {props.toggleError ? (
-          <h5 className="errorMsg">{props.errorMessage}</h5>
-        ) : null}
-        <input type="submit" value="Login" className="submitBtn" />
-      </form>
-    </div>
-  );
-};
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-export default App;
+  return (
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <Box
+            component="form"
+            onSubmit={triggerLogin}
+            noValidate
+            sx={{ mt: 1 }}
+          >
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              onChange={(event) => {
+                setEmail(event.target.value);
+              }}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={(event) => {
+                setPassword(event.target.value);
+              }}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Sign In
+            </Button>
+            <Grid container>
+              <Grid item xs></Grid>
+              <Grid item>
+                <Link href="#" variant="body2" onClick={props.handleToggleForm}>
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+      </Container>
+    </ThemeProvider>
+  );
+}
+
+// export default App;
