@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import axios from "axios";
 import LoginForm from "./components/LoginForm";
 import NewUserForm from "./components/NewUserForm";
-import axios from "axios";
+import Home from "./components/Home";
+import Profile from "./components/Profile";
+import Quiz from "./components/Quiz";
+
 import "./App.css";
 
 const App = () => {
-  const [toggleLogin, setToggleLogin] = useState(true);
-  const [toggleError, setToggleError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [toggleLogout, setToggleLogout] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
 
   const axiosInstance = axios.create({
@@ -59,28 +60,6 @@ const App = () => {
     //   });
   };
 
-  const handleLogout = () => {
-    setCurrentUser({});
-    handleToggleLogout();
-  };
-
-  const handleToggleForm = () => {
-    setToggleError(false);
-    if (toggleLogin === true) {
-      setToggleLogin(false);
-    } else {
-      setToggleLogin(true);
-    }
-  };
-
-  const handleToggleLogout = () => {
-    if (toggleLogout) {
-      setToggleLogout(false);
-    } else {
-      setToggleLogout(true);
-    }
-  };
-
   useEffect(() => {
     axios
       .get("https://lit-anchorage-15647.herokuapp.com/", {
@@ -92,45 +71,25 @@ const App = () => {
   }, []);
 
   return (
-    <div className="App">
-      <div>
-        {toggleLogout ? (
-          <button onClick={handleLogout} className="logoutBtn">
-            Logout
-          </button>
-        ) : (
-          <div className="appFormDiv">
-            {toggleLogin ? (
-              <LoginForm
-                handleLogin={handleLogin}
-                toggleError={toggleError}
-                errorMessage={errorMessage}
-                handleToggleForm={handleToggleForm}
-              />
-            ) : (
-              <NewUserForm
-                handleCreateUser={handleCreateUser}
-                toggleError={toggleError}
-                errorMessage={errorMessage}
-                handleToggleForm={handleToggleForm}
-              />
-            )}
-          </div>
-        )}
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/quiz" element={<Quiz />} />
+          <Route path="/profile" element={<Profile />} />
+
+          <Route
+            path="/login"
+            element={<LoginForm handleLogin={handleLogin} />}
+          />
+
+          <Route
+            path="/signup"
+            element={<NewUserForm handleCreateUser={handleCreateUser} />}
+          />
+        </Routes>
       </div>
-      {currentUser.email ? (
-        <div className="loggedInDiv">
-          <h1>
-            This entire div will only show if a user is currently logged in
-          </h1>
-          <h2>
-            So you could show profile info, or whatever else you want to be
-            authentication protected!
-          </h2>
-          <h3>And you could even stick other React components in here!</h3>
-        </div>
-      ) : null}
-    </div>
+    </Router>
   );
 };
 
