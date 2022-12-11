@@ -30,6 +30,7 @@ export default function SignUp(props) {
       "https://lit-anchorage-15647.herokuapp.com/createaccount",
       {
         method: "POST",
+        mode: "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ firstname, lastname, email, password }),
       }
