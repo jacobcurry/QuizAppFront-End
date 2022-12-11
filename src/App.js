@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import axios from "axios";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import LoginForm from "./components/LoginForm";
 import NewUserForm from "./components/NewUserForm";
 import Home from "./components/Home";
@@ -11,85 +15,61 @@ import Navbar from "./components/Navbar";
 import "./App.css";
 
 const App = () => {
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState(null);
 
-  axios.defaults.headers.common["Content-Type"] =
-    "application/json;charset=utf-8";
-  axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
-
-  const axiosInstance = axios.create({
-    baseURL: "https://lit-anchorage-15647.herokuapp.com/",
-    header: { "Access-Control-Allow_Origin": "*" },
-  });
-
-  const handleCreateUser = async (userObj) => {
-    // const response = await axiosInstance.post("createaccount", userObj, {
-    //   withCredentials: true,
-    // });
-    // console.log(response);
-    axios
-      .post(
-        "https://lit-anchorage-15647.herokuapp.com/createaccount",
-        userObj,
-        { withCredentials: true }
-      )
-      .then((response) => {
-        console.log(response);
-        if (response.data) {
-          console.log("hi");
-          console.log(response);
-          setCurrentUser(response.data);
-        }
-      });
-  };
-
-  const handleLogin = async (userObj) => {
-    //   const response = await axiosInstance.put("login", userObj, {
-    //     withCredentials: true,
-    //   });
-    //   console.log(response);
-    // console.log(userObj);
-    axios
-      .put("https://lit-anchorage-15647.herokuapp.com/login", userObj, {
-        withCredentials: true,
-      })
-      .then((response) => {
-        console.log(response);
-        if (response.data.user) {
-          console.log("hi");
-          console.log(response);
-          setCurrentUser(response.data.user);
-        }
-      });
+  const updateUser = (user) => {
+    setCurrentUser(JSON.parse(localStorage.getItem("user")));
+    console.log(currentUser);
   };
 
   useEffect(() => {
-    axios
-      .get("https://lit-anchorage-15647.herokuapp.com/", {
-        withCredentials: true,
-      })
-      .then((response) => {
-        console.log(response);
-      });
+    setCurrentUser(JSON.parse(localStorage.getItem("user")));
+    console.log(currentUser);
   }, []);
 
   return (
     <Router>
       <div className="App">
-        <Navbar />
+        <Navbar updateUser={updateUser} currentUser={currentUser} />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/quiz" element={<Quiz />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/quiz"
+            element={
+              localStorage.getItem("user") ? <Quiz /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              localStorage.getItem("user") ? (
+                <Profile updateUser={updateUser} />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
 
           <Route
             path="/login"
-            element={<LoginForm handleLogin={handleLogin} />}
+            element={
+              currentUser ? (
+                <Navigate to="/" />
+              ) : (
+                <LoginForm updateUser={updateUser} />
+              )
+            }
           />
 
           <Route
             path="/signup"
-            element={<NewUserForm handleCreateUser={handleCreateUser} />}
+            element={
+              currentUser ? (
+                <Navigate to="/" />
+              ) : (
+                <NewUserForm updateUser={updateUser} />
+              )
+            }
           />
         </Routes>
       </div>

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-const Quiz = () => {
+const Quiz = (props) => {
   return <div>Quiz</div>;
 };
 

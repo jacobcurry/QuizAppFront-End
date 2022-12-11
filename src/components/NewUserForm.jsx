@@ -10,6 +10,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Error from "../assets/Error.png";
 
 const theme = createTheme();
 
@@ -18,21 +19,48 @@ export default function SignUp(props) {
   const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(null);
 
-  const triggerCreateUser = (event) => {
+  const signup = async (firstname, lastname, email, password) => {
+    setIsLoading(true);
+    setError(null);
+
+    const response = await fetch(
+      "https://lit-anchorage-15647.herokuapp.com/createaccount",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ firstname, lastname, email, password }),
+      }
+    );
+
+    const json = await response.json();
+
+    if (!response.ok) {
+      setIsLoading(false);
+      setError(json.error);
+    }
+    if (response.ok) {
+      //save the user to local storage
+      localStorage.setItem("user", JSON.stringify(json));
+    }
+  };
+
+  const triggerCreateUser = async (event) => {
     event.preventDefault();
-    let userObj = {
-      firstname: firstname,
-      lastname: lastname,
-      email: email,
-      password: password,
-    };
-    props.handleCreateUser(userObj);
+    await signup(firstname, lastname, email, password);
+    props.updateUser(email);
+    setIsLoading(false);
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container
+        className="position-absolute top-50 start-50 translate-middle"
+        component="main"
+        maxWidth="xs"
+      >
         <CssBaseline />
         <Box
           sx={{
@@ -40,15 +68,19 @@ export default function SignUp(props) {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            backgroundColor: "white",
+            padding: "1em",
+            borderRadius: "20px",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+          <Avatar sx={{ m: 1, bgcolor: "#1aac83" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
           <Box
+            className="auth-form"
             component="form"
             noValidate
             onSubmit={triggerCreateUser}
@@ -67,6 +99,7 @@ export default function SignUp(props) {
                   onChange={(event) => {
                     setFirstname(event.target.value);
                   }}
+                  value={firstname}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -80,6 +113,7 @@ export default function SignUp(props) {
                   onChange={(event) => {
                     setLastname(event.target.value);
                   }}
+                  value={lastname}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -93,6 +127,7 @@ export default function SignUp(props) {
                   onChange={(event) => {
                     setEmail(event.target.value);
                   }}
+                  value={email}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -107,6 +142,7 @@ export default function SignUp(props) {
                   onChange={(event) => {
                     setPassword(event.target.value);
                   }}
+                  value={password}
                 />
               </Grid>
             </Grid>
@@ -114,18 +150,25 @@ export default function SignUp(props) {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, backgroundColor: "#1aac83" }}
+              disabled={isLoading}
             >
               Sign Up
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="login" variant="body2">
+                <Link href="login" variant="body2" sx={{ color: "#1aac83" }}>
                   Already have an account? Sign in
                 </Link>
               </Grid>
             </Grid>
           </Box>
+          {error && (
+            <div className="error-msg">
+              <img className="error-img" src={Error} alt="error" />
+              <p> {error}</p>
+            </div>
+          )}
         </Box>
       </Container>
     </ThemeProvider>
