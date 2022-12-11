@@ -11,8 +11,14 @@ body,
   margin: 0;
   padding: 0;
   background-color: rgb(237, 237, 237);
+  height: 100%;
 }
 
+.App {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 .header {
   width: 100%;
   height: 100px;
@@ -96,4 +102,126 @@ body,
 .error-img {
   margin: 0.2em;
   width: 2em;
+}
+
+.nav-ul {
+  display: block;
+  padding: 0;
+  margin: 0;
+}
+.nav-li {
+  text-align: center;
+  border: 1px solid transparent;
+  display: block;
+  padding: 0 0.2em;
+  margin: 1em auto;
+  font-size: 1.2em;
+  cursor: pointer;
+  font-weight: 500;
+}
+.nav-li:hover {
+  font-weight: 600;
+}
+
+.profile-container {
+  margin: 2em;
+  height: 100%;
+}
+
+.grid-container {
+  height: 100%;
+  display: grid;
+  gap: 2em;
+  grid-template-columns: 1fr 3fr;
+  grid-template-rows: auto;
+  grid-template-areas:
+    "a ."
+    "a b"
+    "a b"
+    "a b"
+    "a b"
+    "a .";
+}
+
+.nav-container {
+  grid-area: a;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: white;
+  padding: 2em;
+  border-radius: 10px;
+}
+
+.profile-display {
+  grid-area: b;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.top-nav {
+}
+
+.delete-account {
+  font-weight: 500;
+  cursor: pointer;
+  list-style: none;
+  text-align: center;
+  margin: 0 !important;
+  font-size: 1.2em;
+  color: #d8000c;
+}
+
+.delete-account:hover {
+  background-color: #ffbaba;
+}
+
+.modal-backdrop {
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.delete-modal {
+  z-index: 999;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+  height: 35%;
+  width: 35%;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.delete-account-modal {
+  font-weight: 500;
+  cursor: pointer;
+  list-style: none;
+  text-align: center;
+  margin: 0 !important;
+  font-size: 1.2em;
+  color: #d8000c;
+  background-color: #ffbaba;
+  border-bottom: 2px solid #d8000c;
+}
+
+.delete-account-text {
+  margin: 2em;
+}
+
+.delete-btn {
+  align-self: flex-end;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: 2em;
+  background-color: #ffbaba;
+  color: #d8000c;
+  border: 2px solid #d8000c;
+  padding: 0.4em 1em;
+  font-weight: 500;
 }

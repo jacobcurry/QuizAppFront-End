@@ -1,45 +1,63 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const Home = () => {
+const Home = (props) => {
   const [toggleShowForm, setToggleShowForm] = useState(false);
   const [quizData, setQuizData] = useState([]);
   const [amount, setAmount] = useState(10);
   const [category, setCategory] = useState("any");
   const [difficulty, setDifficulty] = useState("any");
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(null);
 
-  const axiosInstance = axios.create({
-    baseURL: `https://opentdb.com`,
-    header: { "Access-Control-Allow_Origin": "*" },
-  });
+  // const axiosInstance = axios.create({
+  //   baseURL: `https://opentdb.com`,
+  //   header: { "Access-Control-Allow_Origin": "*" },
+  // });
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (category === "any" && difficulty === "any") {
-      const response = await axiosInstance.get(`api.php?amount=${amount}`);
-      console.log(response);
-    } else if (difficulty !== "any" && category === "any") {
-      const response = await axiosInstance.get(
-        `api.php?amount=${amount}&difficulty=${difficulty}`
-      );
-      console.log(response);
-    } else if (category !== "any" && difficulty === "any") {
-      const response = await axiosInstance.get(
-        `api.php?amount=${amount}&category=${category}`
-      );
-      console.log(response);
-    } else {
-      const response = await axiosInstance.get(
-        `api.php?amount=${amount}&category=${category}&difficulty=${difficulty}`
-      );
-      console.log(response);
+    const response = await fetch(
+      `https://opentdb.com/api.php?amount=${amount}`,
+      {
+        method: "GET",
+      }
+    );
+    const json = await response.json();
+
+    if (!response.ok) {
+      setIsLoading(false);
+      setError(json.error);
     }
+    if (response.ok) {
+      //save the user to local storage
+      console.log(json);
+    }
+    // if (category === "any" && difficulty === "any") {
+    //   const response = await axiosInstance.get(`api.php?amount=${amount}`);
+    //   console.log(response);
+    // } else if (difficulty !== "any" && category === "any") {
+    //   const response = await axiosInstance.get(
+    //     `api.php?amount=${amount}&difficulty=${difficulty}`
+    //   );
+    //   console.log(response);
+    // } else if (category !== "any" && difficulty === "any") {
+    //   const response = await axiosInstance.get(
+    //     `api.php?amount=${amount}&category=${category}`
+    //   );
+    //   console.log(response);
+    // } else {
+    //   const response = await axiosInstance.get(
+    //     `api.php?amount=${amount}&category=${category}&difficulty=${difficulty}`
+    //   );
+    //   console.log(response);
+    // }
   };
 
   return (
     <div className="">
+      <p className="">Choose from many different options to create a quiz!</p>
       <div className="">
-        <p className="">Choose from many different options to create a quiz!</p>
         <button
           onClick={() => setToggleShowForm(!toggleShowForm)}
           className="btn"

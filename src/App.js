@@ -32,7 +32,7 @@ const App = () => {
       <div className="App">
         <Navbar updateUser={updateUser} currentUser={currentUser} />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home currentUser={currentUser} />} />
           <Route
             path="/quiz"
             element={
@@ -43,7 +43,11 @@ const App = () => {
             path="/profile"
             element={
               localStorage.getItem("user") ? (
-                <Profile updateUser={updateUser} />
+                <Profile
+                  updateUser={updateUser}
+                  currentUser={currentUser}
+                  setCurrentUser={setCurrentUser}
+                />
               ) : (
                 <Navigate to="/login" />
               )

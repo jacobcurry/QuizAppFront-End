@@ -28,8 +28,10 @@ export default function SignIn(props) {
       "https://lit-anchorage-15647.herokuapp.com/login",
       {
         method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
         body: JSON.stringify({ email, password }),
       }
     );
