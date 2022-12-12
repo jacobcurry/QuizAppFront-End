@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState } from "react";
 
 const Profile = (props) => {
@@ -63,10 +62,15 @@ const Profile = (props) => {
             </li>
             <li className="nav-li">Update</li>
           </div>
+          <div>
+            <li onClick={handleLogout} className="nav-li">
+              Log Out
+            </li>
 
-          <li onClick={toggleShowDelete} className="delete-account">
-            Delete Account
-          </li>
+            <li onClick={toggleShowDelete} className="delete-account">
+              Delete Account
+            </li>
+          </div>
         </ul>
 
         {showDelete ? (
@@ -74,7 +78,7 @@ const Profile = (props) => {
             <div className="delete-modal">
               <p className="delete-account-modal">Are You Sure?</p>
               <p className="delete-account-text">
-                Delete user, {props.currentUser.email}?
+                Delete user {props.currentUser.email}?
               </p>
               <button onClick={handleDeleteAccount} className="delete-btn">
                 Delete Account

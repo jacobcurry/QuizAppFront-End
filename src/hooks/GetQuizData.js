@@ -6,7 +6,6 @@ export const GetQuizData = async (amount, category, difficulty) => {
         method: "GET",
       }
     );
-
     const json = await response.json();
     return [response, json];
   } else if (difficulty !== "any" && category === "any") {
