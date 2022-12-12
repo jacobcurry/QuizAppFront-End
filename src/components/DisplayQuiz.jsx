@@ -16,31 +16,41 @@ const DisplayQuiz = (props) => {
   }, []);
 
   return (
-    <div className="quiz-container">
-      <div className="each-quiz">
-        <div className="each-question">
-          <p className="question-num">{props.index + 1}</p>
-          <p className="category">Category: {props.question.category}</p>
-          <p className="question">{decode(props.question.question)}</p>
-          {props.question.type === "boolean" ? (
-            <form>
-              <label>True</label>
+    <div className="each-quiz">
+      <div className="each-question">
+        <div className="question-num">
+          <p className="question-num-p">{props.index + 1}.</p>
+          <p className="category-name">
+            <span className="category">Category: </span>{" "}
+            {props.question.category}
+          </p>
+        </div>
+        <hr />
+        <p className="question">{decode(props.question.question)}</p>
+        {props.question.type === "boolean" ? (
+          <form className="true-false-form">
+            <div className="true-false-div">
+              <label className="boolean-title">True</label>
               <input
+                className="radio"
                 onChange={(e) => setUserAnswer("True")}
                 name={props.index}
                 type="radio"
               />
-              <label>False</label>
+            </div>
+            <div className="true-false-div">
+              <label className="boolean-title">False</label>
               <input
+                className="radio"
                 onChange={(e) => setUserAnswer("False")}
                 name={props.index}
                 type="radio"
               />
-            </form>
-          ) : (
-            <div></div>
-          )}
-        </div>
+            </div>
+          </form>
+        ) : (
+          <div></div>
+        )}
       </div>
     </div>
   );
