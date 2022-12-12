@@ -52,6 +52,7 @@ const Profile = (props) => {
       <div className="grid-container">
         <ul className="nav-ul nav-container">
           <div className="top-nav">
+            <li className="nav-li">Quizzes</li>
             <li
               onClick={() => {
                 setShowProfileInfo(!showProfileInfo);
