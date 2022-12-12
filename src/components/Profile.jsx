@@ -174,15 +174,15 @@ const Profile = (props) => {
         {showUpdatedProfileInfo ?  <div className="update-profile-display">
   <form onSubmit={handleUpdatedProfileInfo}>
     <label>First Name: </label>
-    <input type="text" id="fname" name="firstname" defaultValue={showUser.firstname} onChange={(e)=>{
+    <input className='profile-input'type="text"  name="firstname" defaultValue={showUser.firstname} onChange={(e)=>{
       setUpdatedFirstName(e.target.value)
     }}></input>
           <br/>
     <label>Last Name: </label>
-    <input type="text" id="lname" name="lastname" defaultValue={showUser.lastname}></input>
+    <input className='profile-input' type="text" name="lastname" defaultValue={showUser.lastname}></input>
           <br/>
           <label>Email: </label>
-    <input type="text" id="fname" name="firstname" defaultValue={showUser.email}></input>
+    <input className='profile-input' type="text" name="firstname" defaultValue={showUser.email}></input>
           <br/>
     <input className='btn' type="submit" value="Submit"></input>
   </form>
