@@ -1,5 +1,5 @@
-
 import React, { useState, useEffect } from "react";
+import Error from "../assets/Error.png";
 
 const Profile = (props) => {
   const [showProfileInfo, setShowProfileInfo] = useState(false);
@@ -8,9 +8,9 @@ const Profile = (props) => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
   const [showUser, setShowUser] = useState([]);
-  const [updatedFirstName, setUpdatedFirstName] = useState('');
-  const [updatedLastName, setUpdatedLastName] = useState('');
-  const [updatedEmail, setUpdatedEmail] = useState('')
+  const [updatedFirstName, setUpdatedFirstName] = useState();
+  const [updatedLastName, setUpdatedLastName] = useState();
+  const [updatedEmail, setUpdatedEmail] = useState();
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -22,7 +22,7 @@ const Profile = (props) => {
   };
   // const toggleShowProfileInfo = () => {
   //   setShowProfileInfo(!showProfileInfo);
-   
+
   // };
 
   const handleDeleteAccount = async () => {
@@ -70,32 +70,30 @@ const Profile = (props) => {
     );
 
     const json = await response.json();
-    // console.log(json);
-   setShowUser(json)
-   console.log(json);
-
-  }
+    setShowUser(json);
+  };
 
   const toggleShowProfileInfo = () => {
-    handleShowProfile()
+    handleShowProfile();
+    setShowUpdatedProfileInfo(false);
     setShowProfileInfo(!showProfileInfo);
-   
   };
 
   const toggleUpdateProfileInfo = () => {
-    
-    console.log(showUser);
-    setUpdatedFirstName(showUser.firstname)
-    setUpdatedLastName(showUser.lastname)
-    setUpdatedEmail(showUser.email)
-    handleShowProfile()
+
+    handleShowProfile();
+    setShowProfileInfo(false);
+
     setShowUpdatedProfileInfo(!showUpdatedProfileInfo);
-   
+    setUpdatedFirstName(showUser.firstname);
+    setUpdatedLastName(showUser.lastname);
+    setUpdatedEmail(showUser.email);
   };
 
-  const handleUpdatedProfileInfo = async () => {
-   
-
+  const handleUpdatedProfileInfo = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setIsLoading(true);
     const response = await fetch(
       `https://lit-anchorage-15647.herokuapp.com/${props.currentUser.email}`,
       {
@@ -104,32 +102,29 @@ const Profile = (props) => {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
         },
-       body:{
-        firstname: updatedFirstName,
-        lastname: updatedLastName,
-        email: updatedEmail
-      }
+        body: JSON.stringify({
+          firstname: updatedFirstName,
+          lastname: updatedLastName,
+          email: updatedEmail,
+        }),
       }
     );
     const json = await response.json();
-    console.log(json);
-    
-  }
-  
+    if (!response.ok) {
+      setIsLoading(false);
+      setError(json.error);
+    }
+    if (response.ok) {
+      localStorage.removeItem("user");
+      localStorage.setItem("user", JSON.stringify(json));
+      props.setCurrentUser(localStorage.getItem("user"));
+      setIsLoading(false);
+    }
+  };
 
-  //   if (!response.ok) {
-  //     setIsLoading(false);
-  //     setError(json.error);
-  //   }
-  //   if (response.ok) {
-  //     localStorage.getItem("user");
-  //     props.setCurrentUser(null);
-  //   }
-  // }  
-  
   // useEffect(() => {
-  //   handleShowProfile()
-  // },[])
+  //   handleShowProfile();
+  // }, []);
 
   return (
     <div className="profile-container">
@@ -137,15 +132,12 @@ const Profile = (props) => {
         <ul className="nav-ul nav-container">
           <div className="top-nav">
             <li className="nav-li">Quizzes</li>
-            <li
-              onClick={ 
-               toggleShowProfileInfo
-              }
-              className="nav-li"
-            >
+            <li onClick={toggleShowProfileInfo} className="nav-li">
               Profile Info
             </li>
-            <li className="nav-li" onClick={toggleUpdateProfileInfo}>Update</li>
+            <li className="nav-li" onClick={toggleUpdateProfileInfo}>
+              Update
+            </li>
           </div>
           <div>
             <li onClick={handleLogout} className="nav-li">
@@ -171,24 +163,69 @@ const Profile = (props) => {
             </div>
           </div>
         ) : null}
-        {showProfileInfo ? <div className="profile-display">First Name: {showUser.firstname}<br/>Last Name: {showUser.lastname}<br/><span>Email:</span> {showUser.email}<br/></div> : null}
-        {showUpdatedProfileInfo ?  <div className="update-profile-display">
-  <form onSubmit={handleUpdatedProfileInfo}>
-    <label>First Name: </label>
-    <input className='profile-input'type="text"  name="firstname" defaultValue={showUser.firstname} onChange={(e)=>{
-      setUpdatedFirstName(e.target.value)
-    }}></input>
-          <br/>
-    <label>Last Name: </label>
-    <input className='profile-input' type="text" name="lastname" defaultValue={showUser.lastname}></input>
-          <br/>
-          <label>Email: </label>
-    <input className='profile-input' type="text" name="firstname" defaultValue={showUser.email}></input>
-          <br/>
-    <input className='btn' type="submit" value="Submit"></input>
-  </form>
-</div>
-: null}
+        {showProfileInfo ? (
+          <div className="profile-display">
+            First Name: {showUser.firstname}
+            <br />
+            Last Name: {showUser.lastname}
+            <br />
+            <span>Email:</span> {showUser.email}
+            <br />
+          </div>
+        ) : null}
+        {showUpdatedProfileInfo ? (
+          <div className="update-profile-display">
+            <form
+              className="update-profile-form"
+              onSubmit={handleUpdatedProfileInfo}
+            >
+              <label className="">First Name: </label>
+              <input
+                className="profile-input"
+                type="text"
+                name="firstname"
+                defaultValue={showUser.firstname}
+                onChange={(e) => {
+                  setUpdatedFirstName(e.target.value);
+                }}
+              ></input>
+              <br />
+              <label>Last Name: </label>
+              <input
+                className="profile-input"
+                type="text"
+                name="lastname"
+                defaultValue={showUser.lastname}
+                onChange={(e) => {
+                  setUpdatedLastName(e.target.value);
+                }}
+              ></input>
+              <br />
+              <label>Email: </label>
+              <input
+                className="profile-input"
+                type="text"
+                name="firstname"
+                defaultValue={showUser.email}
+                onChange={(e) => {
+                  setUpdatedEmail(e.target.value);
+                }}
+              ></input>
+              <br />
+              <input
+                className="btn update-submit"
+                type="submit"
+                value="Submit"
+              ></input>
+            </form>
+            {error && (
+              <div className="error-msg">
+                <img className="error-img" src={Error} alt="error" />
+                <p> {error}</p>
+              </div>
+            )}
+          </div>
+        ) : null}
       </div>
     </div>
   );
