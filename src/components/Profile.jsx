@@ -80,12 +80,11 @@ const Profile = (props) => {
   };
 
   const toggleUpdateProfileInfo = () => {
-    handleShowProfile();
-    setShowProfileInfo(false);
+    handleShowProfile()
+    console.log(showUser);
+    
     setShowUpdatedProfileInfo(!showUpdatedProfileInfo);
-    setUpdatedFirstName(showUser.firstname);
-    setUpdatedLastName(showUser.lastname);
-    setUpdatedEmail(showUser.email);
+  
   };
 
   const handleUpdatedProfileInfo = async (e) => {
