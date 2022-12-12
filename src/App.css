@@ -234,6 +234,11 @@ body,
   padding: 1em;
   grid-area: b;
 }
+
+.update-profile-form {
+  width: 100%;
+}
+
   .profile-input {
     width: 100%;
     padding: 12px 20px;
@@ -242,6 +247,11 @@ body,
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+  }
+
+  .update-submit {
+    text-align: center;
+    width: 100%;
   }
   
   
