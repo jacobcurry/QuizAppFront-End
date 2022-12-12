@@ -174,7 +174,7 @@ const Profile = (props) => {
         {showUpdatedProfileInfo ?  <div className="update-profile-display">
   <form onSubmit={handleUpdatedProfileInfo}>
     <label>First Name: </label>
-    <input type="text"  name="firstname" defaultValue={showUser.firstname} onChange={(e)=>{
+    <input className='profile-input'type="text"  name="firstname" defaultValue={showUser.firstname} onChange={(e)=>{
       setUpdatedFirstName(e.target.value)
     }}></input>
           <br/>
