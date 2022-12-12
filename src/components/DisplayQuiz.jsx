@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { decode } from "html-entities";
-
-decode("&quot; &#039;");
+import { GenerateRandomMultipleChoice } from "../hooks/GenerateRandomMultipleChoice";
 
 const DisplayQuiz = (props) => {
   const [correctAnswer] = useState(props.question.correct_answer);
   const [incorrectAnswers] = useState(props.question.incorrect_answers);
   const [userAnswer, setUserAnswer] = useState(null);
+  const [multipleChoiceArray, setMultipleChoiceArray] = useState();
 
-  const randNum = () => {
-    return Math.floor(Math.random() * 4);
-  };
-  const [mulitpleChoiceArray, setMultipleChoiceArray] = useState(
-    incorrectAnswers.splice(randNum(), 0, correctAnswer)
-  );
-
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (props.question.type === "multiple")
+      setMultipleChoiceArray(
+        GenerateRandomMultipleChoice(incorrectAnswers, correctAnswer)
+      );
+  }, []);
 
   return (
     <div className="quiz-container">

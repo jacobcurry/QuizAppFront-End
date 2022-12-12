@@ -134,12 +134,12 @@ body,
   grid-template-columns: 1fr 3fr;
   grid-template-rows: auto;
   grid-template-areas:
-    "a ."
     "a b"
     "a b"
     "a b"
     "a b"
-    "a .";
+    "a b"
+    "a b";
 }
 
 .nav-container {
@@ -158,9 +158,6 @@ body,
   border-radius: 10px;
   padding: 10px;
   text-align: center;
-}
-
-.top-nav {
 }
 
 .delete-account {
@@ -227,11 +224,15 @@ body,
   font-weight: 500;
 }
 
-.update-profile-display{
-  border-radius: 5px;
-    background-color: white;
-    padding: 20px;
-    grid-area: b;
+.update-profile-display {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 1em;
+  border-radius: 20px;
+  background-color: white;
+  padding: 1em;
+  grid-area: b;
 }
   .profile-input {
     width: 100%;
@@ -243,7 +244,7 @@ body,
     box-sizing: border-box;
   }
   
- 
+  
   
    
 
