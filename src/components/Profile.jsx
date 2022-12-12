@@ -1,11 +1,13 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Profile = (props) => {
   const [showProfileInfo, setShowProfileInfo] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
+  const [showUser, setShowUser] = useState([]);
+  const [count, setCount] = useState(1)
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -15,9 +17,10 @@ const Profile = (props) => {
   const toggleShowDelete = () => {
     setShowDelete(!showDelete);
   };
-  const toggleShowProfileInfo = () => {
-    setShowProfileInfo(!showProfileInfo);
-  };
+  // const toggleShowProfileInfo = () => {
+  //   setShowProfileInfo(!showProfileInfo);
+   
+  // };
 
   const handleDeleteAccount = async () => {
     setShowDelete(false);
@@ -47,6 +50,48 @@ const Profile = (props) => {
     }
   };
 
+  const handleShowProfile = async () => {
+    setShowProfileInfo(false);
+    setIsLoading(true);
+    setError(null);
+
+    const response = await fetch(
+      `https://lit-anchorage-15647.herokuapp.com/${props.currentUser.email}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    );
+
+    const json = await response.json();
+    // console.log(json);
+    setShowUser(json)
+  }
+
+  const toggleShowProfileInfo = () => {
+    handleShowProfile()
+    setShowProfileInfo(!showProfileInfo);
+   
+   
+  };
+
+  //   if (!response.ok) {
+  //     setIsLoading(false);
+  //     setError(json.error);
+  //   }
+  //   if (response.ok) {
+  //     localStorage.getItem("user");
+  //     props.setCurrentUser(null);
+  //   }
+  // }  
+  
+  // useEffect(() => {
+  //   handleShowProfile()
+  // },[count])
+
   return (
     <div className="profile-container">
       <div className="grid-container">
@@ -54,9 +99,9 @@ const Profile = (props) => {
           <div className="top-nav">
             <li className="nav-li">Quizzes</li>
             <li
-              onClick={() => {
-                setShowProfileInfo(!showProfileInfo);
-              }}
+              onClick={ 
+               toggleShowProfileInfo
+              }
               className="nav-li"
             >
               Profile Info
@@ -87,7 +132,7 @@ const Profile = (props) => {
             </div>
           </div>
         ) : null}
-        {showProfileInfo ? <div className="profile-display"></div> : null}
+        {showProfileInfo ? <div className="profile-display">Email: {showUser.email}<br/>First Name: {showUser.firstname}</div> : null}
       </div>
     </div>
   );
