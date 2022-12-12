@@ -156,6 +156,8 @@ body,
   grid-area: b;
   background-color: white;
   border-radius: 10px;
+  padding: 10px;
+  text-align: center;
 }
 
 .top-nav {
@@ -224,3 +226,26 @@ body,
   padding: 0.4em 1em;
   font-weight: 500;
 }
+
+.update-profile-display{
+  border-radius: 5px;
+    background-color: white;
+    padding: 20px;
+    grid-area: b;
+}
+  input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  
+  
+   
+
+  
+
