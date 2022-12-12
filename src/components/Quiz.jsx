@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import DisplayQuiz from "./DisplayQuiz";
 import { GetQuizData, GetNumInDB } from "../hooks/GetQuizData";
 import Error from "../assets/Error.png";
+import { decode } from "html-entities";
 
 const Quiz = (props) => {
   const [ShowForm, setShowForm] = useState(true);
@@ -116,7 +117,7 @@ const Quiz = (props) => {
         </form>
       ) : (
         quizData.map((question, index) => {
-          return <DisplayQuiz key={index} question={question} />;
+          return <DisplayQuiz key={index} index={index} question={question} />;
         })
       )}
     </div>
