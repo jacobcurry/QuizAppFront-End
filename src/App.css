@@ -156,6 +156,8 @@ body,
   grid-area: b;
   background-color: white;
   border-radius: 10px;
+  padding: 10px;
+  text-align: center;
 }
 
 .top-nav {
@@ -223,4 +225,8 @@ body,
   border: 2px solid #d8000c;
   padding: 0.4em 1em;
   font-weight: 500;
+}
+
+span{
+  text-align: center;
 }
