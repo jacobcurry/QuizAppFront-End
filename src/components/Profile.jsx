@@ -7,7 +7,7 @@ const Profile = (props) => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
   const [showUser, setShowUser] = useState([]);
-  const [count, setCount] = useState(1)
+ 
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -132,7 +132,7 @@ const Profile = (props) => {
             </div>
           </div>
         ) : null}
-        {showProfileInfo ? <div className="profile-display">Email: {showUser.email}<br/>First Name: {showUser.firstname}</div> : null}
+        {showProfileInfo ? <div className="profile-display">Email: {showUser.email}<br/>Last Name: {showUser.lastname}<br/>First Name: {showUser.firstname}</div> : null}
       </div>
     </div>
   );
