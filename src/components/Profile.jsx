@@ -11,6 +11,8 @@ const Profile = (props) => {
   const [updatedFirstName, setUpdatedFirstName] = useState();
   const [updatedLastName, setUpdatedLastName] = useState();
   const [updatedEmail, setUpdatedEmail] = useState();
+  const [showQuiz, setShowQuiz] = useState(false)
+  const [showQuizInfo, setShowQuizInfo] = useState()
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -119,12 +121,47 @@ const Profile = (props) => {
     }
   };
 
+  const handleShowQuizzes = async () => {
+    const email = JSON.parse(localStorage.getItem('user')).email
+    setIsLoading(true);
+    setError(null);
+
+    const response = await fetch(
+      `https://lit-anchorage-15647.herokuapp.com/quiz/${email}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    );
+      
+    const json = await response.json();
+    if(!response.ok){
+    console.log(json.error)
+  }if(response.ok){
+    setShowQuizInfo(json);
+    console.log(json);
+  }
+    
+  }
+
+  const toggleShowQuiz = () => {
+    
+    setShowQuiz(!showQuiz)
+  }
+
+  useEffect(() => {
+    handleShowQuizzes()
+  },[])
+
   return (
     <div className="profile-container">
       <div className="grid-container">
         <ul className="nav-ul nav-container">
           <div className="top-nav">
-            <li className="nav-li">Quizzes</li>
+            <li className="nav-li" onClick={toggleShowQuiz}>Quizzes</li>
             <li onClick={toggleShowProfileInfo} className="nav-li">
               Profile Info
             </li>
@@ -219,7 +256,19 @@ const Profile = (props) => {
             )}
           </div>
         ) : null}
+        {showQuiz ? ( <div className="quiz-score">
+           {showQuizInfo.map((quiz, index) => {
+            return(
+            <div>
+              <p>{quiz.score}</p>
+            </div>
+            )
+           })}
+          
+          </div>
+        ) : null}
       </div>
+
     </div>
   );
 };
