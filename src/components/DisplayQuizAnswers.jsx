@@ -12,6 +12,7 @@ const DisplayQuizAnswers = (props) => {
         GenerateRandomMultipleChoice(incorrectAnswers, correctAnswer)
       );
     }
+    console.log(props.postedQuiz);
   }, []);
 
   return (
@@ -43,11 +44,12 @@ const DisplayQuizAnswers = (props) => {
           </div>
         ) : (
           <div className="true-false-form">
-            {multipleChoiceArray.map((answer, index) => {
+            {props.postedQuiz.map.quizData((answer, index) => {
               return (
                 <div key={index} className="true-false-div">
                   <label className="boolean-title">
                     <input name={props.index} className="radio" type="radio" />
+
                     {decode(answer)}
                   </label>
                 </div>

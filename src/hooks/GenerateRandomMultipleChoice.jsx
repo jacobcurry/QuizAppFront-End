@@ -1,6 +1,6 @@
 export const GenerateRandomMultipleChoice = (incorrect, correct) => {
   const randNum = () => {
-    return Math.floor(Math.random() * 4);
+    return Math.floor(Math.random() * 4) + 1;
   };
   const arr = incorrect;
   arr.splice(randNum(), 0, correct);

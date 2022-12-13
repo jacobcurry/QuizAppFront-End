@@ -234,7 +234,7 @@ const Quiz = (props) => {
       {showQuizScore ? (
         <div>
           <p>Your Quiz Results</p>
-          <p>{CheckGoodScore(score)}</p>
+          <p>{CheckGoodScore(score)}%</p>
           <p>{compareScoreFeedback(CheckGoodScore(score))}</p>
           {quizData.map((question, index) => {
             return (
@@ -242,8 +242,7 @@ const Quiz = (props) => {
                 key={index}
                 index={index}
                 question={question}
-                postQuiz={postQuiz}
-                score={score}
+                postedQuiz={postedQuiz}
               />
             );
           })}
