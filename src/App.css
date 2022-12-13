@@ -195,6 +195,13 @@ body,
   flex-direction: column;
 }
 
+.check-answers-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 0.5em 1em;
+}
+
 .delete-account-modal {
   font-weight: 500;
   cursor: pointer;
@@ -205,6 +212,29 @@ body,
   color: #d8000c;
   background-color: #ffbaba;
   border-bottom: 2px solid #d8000c;
+}
+
+.send-quiz-div {
+  margin: 0.5em 1em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--primary);
+}
+
+.x {
+  width: 20px;
+  height: 20px;
+  cursor: pointer !important;
+}
+.send-quiz-modal {
+  font-weight: 500;
+  list-style: none;
+  text-align: center;
+  margin: 0 !important;
+  font-size: 1.2em;
+  color: var(--primary);
+  background-color: white;
 }
 
 .delete-account-text {

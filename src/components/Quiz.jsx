@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import DisplayQuiz from "./DisplayQuiz";
+import DisplayQuizAnswers from "./DisplayQuizAnswers";
 import { GetQuizData, GetNumInDB } from "../hooks/GetQuizData";
 import { GetAllIndexes } from "../hooks/GetAllIndexes";
+import { CheckGoodScore, compareScoreFeedback } from "../hooks/CheckGoodScore";
 import Error from "../assets/Error.png";
+import X from "../assets/X.png";
 import { decode } from "html-entities";
 
 const Quiz = (props) => {
@@ -18,6 +21,9 @@ const Quiz = (props) => {
   const [score, setScore] = useState();
   const [showQuizScore, setShowQuizScore] = useState(false);
   const [missedQuestions, setMissedQuestions] = useState([]);
+  const [postedQuiz, setPostedQuiz] = useState({});
+  const [checkAnswers, setCheckAnswers] = useState(false);
+  const [displayQuiz, setDisplayQuiz] = useState(false);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -32,6 +38,7 @@ const Quiz = (props) => {
       if (json.response_code === 0) {
         setQuizData(json.results);
         setShowForm(false);
+        setDisplayQuiz(true);
         setIsLoading(false);
         json.results.map((question, index) => {
           setCorrectAnswersArr((oldArray) => [
@@ -50,6 +57,43 @@ const Quiz = (props) => {
     }
   };
 
+  const postQuiz = async () => {
+    setCheckAnswers(false);
+    setIsLoading(true);
+    setError(false);
+    const email = JSON.parse(localStorage.getItem("user")).email;
+    const response = await fetch(
+      "https://lit-anchorage-15647.herokuapp.com/quiz",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({
+          email,
+          quizData,
+          correctAnswers: correctAnswersArr,
+          userAnswers: userAnswerArr,
+          score,
+        }),
+      }
+    );
+
+    const json = await response.json();
+
+    if (!response.ok) {
+      setIsLoading(false);
+      setError(json.error);
+      console.log(json.error);
+    }
+    if (response.ok) {
+      setPostedQuiz(json);
+      setDisplayQuiz(false);
+      setShowQuizScore(true);
+    }
+  };
+
   const checkUserAnswers = (e) => {
     e.preventDefault();
     if (userAnswerArr.includes(null)) {
@@ -65,7 +109,7 @@ const Quiz = (props) => {
           setScore(`${correctAnswers}/${i + 1}`);
         }
       }
-      setShowQuizScore(true);
+      setCheckAnswers(true);
     }
   };
 
@@ -146,7 +190,8 @@ const Quiz = (props) => {
             </div>
           )}
         </form>
-      ) : (
+      ) : null}
+      {displayQuiz ? (
         <form onSubmit={checkUserAnswers}>
           {quizData.map((question, index) => {
             return (
@@ -164,7 +209,46 @@ const Quiz = (props) => {
           })}
           <button className="btn quiz-submit">Submit Quiz</button>
         </form>
-      )}
+      ) : null}
+      {checkAnswers ? (
+        <div className="modal-backdrop">
+          <div className="delete-modal">
+            <div className="send-quiz-div">
+              <p className="send-quiz-modal">Are You Sure?</p>
+              <img
+                className="x"
+                onClick={() => setCheckAnswers(false)}
+                src={X}
+                alt="x"
+              />
+            </div>
+            <p className="delete-account-text">
+              Double check your answers or submit if all your answers look good!
+            </p>
+            <button onClick={postQuiz} className="btn check-answers-btn">
+              Submit Quiz
+            </button>
+          </div>
+        </div>
+      ) : null}
+      {showQuizScore ? (
+        <div>
+          <p>Your Quiz Results</p>
+          <p>{CheckGoodScore(score)}</p>
+          <p>{compareScoreFeedback(CheckGoodScore(score))}</p>
+          {quizData.map((question, index) => {
+            return (
+              <DisplayQuizAnswers
+                key={index}
+                index={index}
+                question={question}
+                postQuiz={postQuiz}
+                score={score}
+              />
+            );
+          })}
+        </div>
+      ) : null}
     </div>
   );
 };
