@@ -243,6 +243,7 @@ const Quiz = (props) => {
                 index={index}
                 question={question}
                 postedQuiz={postedQuiz}
+                userAnswerArr={userAnswerArr}
               />
             );
           })}

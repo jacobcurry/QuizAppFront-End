@@ -31,27 +31,65 @@ const DisplayQuizAnswers = (props) => {
           <div className="true-false-form">
             <div className="true-false-div">
               <label className="boolean-title">
-                <input className="radio" name={props.index} type="radio" />
+                <input
+                  readOnly
+                  className="radio"
+                  name={props.index}
+                  type="radio"
+                  checked={
+                    "True" === props.userAnswerArr[props.index]
+                      ? "checked"
+                      : null
+                  }
+                />
                 True
               </label>
             </div>
             <div className="true-false-div">
               <label className="boolean-title">
-                <input className="radio" name={props.index} type="radio" />
+                <input
+                  readOnly
+                  className="radio"
+                  name={props.index}
+                  type="radio"
+                  checked={
+                    "False" === props.userAnswerArr[props.index]
+                      ? "checked"
+                      : null
+                  }
+                />
                 False
               </label>
             </div>
           </div>
         ) : (
           <div className="true-false-form">
-            {props.postedQuiz.map.quizData((answer, index) => {
+            {multipleChoiceArray.map((answer, index) => {
               return (
-                <div key={index} className="true-false-div">
+                <div
+                  key={index}
+                  className={`true-false-div ${
+                    answer === props.userAnswerArr[props.index]
+                      ? "yourAnswer"
+                      : "falseAnswer"
+                  }`}
+                >
                   <label className="boolean-title">
-                    <input name={props.index} className="radio" type="radio" />
+                    <input
+                      readOnly
+                      name={props.index}
+                      className="radio"
+                      type="radio"
+                      checked={
+                        answer === props.userAnswerArr[props.index]
+                          ? "checked"
+                          : null
+                      }
+                    />
 
                     {decode(answer)}
                   </label>
+                  {answer === correctAnswer ? <div>&#8592; Correct</div> : null}
                 </div>
               );
             })}
