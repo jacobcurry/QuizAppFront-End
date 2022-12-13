@@ -5,7 +5,6 @@ import { GenerateRandomMultipleChoice } from "../hooks/GenerateRandomMultipleCho
 const DisplayQuiz = (props) => {
   const [correctAnswer] = useState(props.question.correct_answer);
   const [incorrectAnswers] = useState(props.question.incorrect_answers);
-  const [userAnswer, setUserAnswer] = useState(null);
   const [multipleChoiceArray, setMultipleChoiceArray] = useState([]);
 
   useEffect(() => {
@@ -29,28 +28,61 @@ const DisplayQuiz = (props) => {
         <hr />
         <p className="question">{decode(props.question.question)}</p>
         {props.question.type === "boolean" ? (
-          <form className="true-false-form">
+          <div className="true-false-form">
             <div className="true-false-div">
-              <label className="boolean-title">True</label>
-              <input
-                className="radio"
-                onChange={(e) => setUserAnswer("True")}
-                name={props.index}
-                type="radio"
-              />
+              <label className="boolean-title">
+                <input
+                  className="radio"
+                  onChange={(e) =>
+                    props.setUserAnswerArr((oldArray) => [...oldArray, "True"])
+                  }
+                  name={props.index}
+                  type="radio"
+                />
+                True
+              </label>
             </div>
             <div className="true-false-div">
-              <label className="boolean-title">False</label>
-              <input
-                className="radio"
-                onChange={(e) => setUserAnswer("False")}
-                name={props.index}
-                type="radio"
-              />
+              <label className="boolean-title">
+                <input
+                  className="radio"
+                  onChange={(e) =>
+                    props.setUserAnswerArr((oldArray) => [...oldArray, "False"])
+                  }
+                  name={props.index}
+                  type="radio"
+                />
+                False
+              </label>
             </div>
-          </form>
+          </div>
         ) : (
-          <div></div>
+          <div className="true-false-form">
+            {multipleChoiceArray.map((answer, index) => {
+              return (
+                <div key={index} className="true-false-div">
+                  <label className="boolean-title">
+                    <input
+                      name={props.index}
+                      className="radio"
+                      type="radio"
+                      onChange={(e) => {
+                        props.setUserAnswerArr((oldArray) => [
+                          ...oldArray,
+                          decode(answer),
+                        ]);
+                        props.setCorrectAnswersArr((oldArray) => [
+                          ...oldArray,
+                          decode(correctAnswer),
+                        ]);
+                      }}
+                    />
+                    {decode(answer)}
+                  </label>
+                </div>
+              );
+            })}
+          </div>
         )}
       </div>
     </div>

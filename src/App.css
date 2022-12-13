@@ -261,6 +261,7 @@ body,
 
 .each-quiz {
   background-color: white;
+  box-shadow: 4px 4px 4px var(--primary);
   margin: 2em;
   padding: 1em;
   border-radius: 20px;
@@ -303,11 +304,12 @@ body,
 }
 .true-false-div {
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
 .boolean-title {
+  display: flex;
+  align-items: center;
   margin: 0.3em;
 }
 
@@ -319,7 +321,7 @@ body,
   height: 0.9em;
   border: 0.15em solid #1aac83;
   border-radius: 50%;
-
+  margin-right: 0.7em;
   display: grid;
   place-content: center;
 }

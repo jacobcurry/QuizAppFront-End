@@ -12,6 +12,8 @@ const Quiz = (props) => {
   const [difficulty, setDifficulty] = useState("any");
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
+  const [correctAnswersArr, setCorrectAnswersArr] = useState([]);
+  const [userAnswerArr, setUserAnswerArr] = useState([]);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -115,9 +117,22 @@ const Quiz = (props) => {
           )}
         </form>
       ) : (
-        quizData.map((question, index) => {
-          return <DisplayQuiz key={index} index={index} question={question} />;
-        })
+        <form>
+          {quizData.map((question, index) => {
+            return (
+              <DisplayQuiz
+                key={index}
+                index={index}
+                question={question}
+                correctAnswersArr={correctAnswersArr}
+                setCorrectAnswersArr={setCorrectAnswersArr}
+                userAnswerArr={userAnswerArr}
+                setUserAnswerArr={setUserAnswerArr}
+              />
+            );
+          })}
+          <button className="btn quiz-submit">Submit Quiz</button>
+        </form>
       )}
     </div>
   );

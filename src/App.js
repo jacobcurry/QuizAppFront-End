@@ -24,7 +24,6 @@ const App = () => {
 
   useEffect(() => {
     setCurrentUser(JSON.parse(localStorage.getItem("user")));
-    console.log(currentUser);
   }, []);
 
   return (
