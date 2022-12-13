@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import DisplayQuiz from "./DisplayQuiz";
 import { GetQuizData, GetNumInDB } from "../hooks/GetQuizData";
+import { GetAllIndexes } from "../hooks/GetAllIndexes";
 import Error from "../assets/Error.png";
 import { decode } from "html-entities";
 
@@ -14,6 +15,9 @@ const Quiz = (props) => {
   const [isLoading, setIsLoading] = useState(null);
   const [correctAnswersArr, setCorrectAnswersArr] = useState([]);
   const [userAnswerArr, setUserAnswerArr] = useState([]);
+  const [score, setScore] = useState();
+  const [showQuizScore, setShowQuizScore] = useState(false);
+  const [missedQuestions, setMissedQuestions] = useState([]);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -29,6 +33,13 @@ const Quiz = (props) => {
         setQuizData(json.results);
         setShowForm(false);
         setIsLoading(false);
+        json.results.map((question, index) => {
+          setCorrectAnswersArr((oldArray) => [
+            ...oldArray,
+            question.correct_answer,
+          ]);
+          setUserAnswerArr((oldArray) => [...oldArray, null]);
+        });
       } else {
         const numInDB = await GetNumInDB(category, difficulty);
         setError(
@@ -36,6 +47,25 @@ const Quiz = (props) => {
         );
         setIsLoading(false);
       }
+    }
+  };
+
+  const checkUserAnswers = (e) => {
+    e.preventDefault();
+    if (userAnswerArr.includes(null)) {
+      setMissedQuestions(GetAllIndexes(userAnswerArr, null));
+    } else {
+      setMissedQuestions([]);
+      let correctAnswers = 0;
+      for (let i = 0; i < correctAnswersArr.length; i++) {
+        if (correctAnswersArr[i] === userAnswerArr[i]) {
+          correctAnswers++;
+          setScore(`${correctAnswers}/${i + 1}`);
+        } else {
+          setScore(`${correctAnswers}/${i + 1}`);
+        }
+      }
+      setShowQuizScore(true);
     }
   };
 
@@ -117,7 +147,7 @@ const Quiz = (props) => {
           )}
         </form>
       ) : (
-        <form>
+        <form onSubmit={checkUserAnswers}>
           {quizData.map((question, index) => {
             return (
               <DisplayQuiz
@@ -128,6 +158,7 @@ const Quiz = (props) => {
                 setCorrectAnswersArr={setCorrectAnswersArr}
                 userAnswerArr={userAnswerArr}
                 setUserAnswerArr={setUserAnswerArr}
+                missedQuestions={missedQuestions}
               />
             );
           })}

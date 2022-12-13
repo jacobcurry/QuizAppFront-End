@@ -269,6 +269,7 @@ body,
 
 .question-num {
   display: flex;
+  align-items: center;
   font-size: 1.2em;
   margin: 0;
   padding: 0;
@@ -327,4 +328,9 @@ body,
 }
 .radio:checked {
   background-color: #1aac83;
+}
+
+.question-error {
+  width: 20px;
+  margin-right: 1em;
 }
