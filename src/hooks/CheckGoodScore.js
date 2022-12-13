@@ -3,8 +3,7 @@ export const CheckGoodScore = (score) => {
   splitScore = splitScore.map((item) => {
     return parseInt(item);
   });
-  let percent = (splitScore[0] / splitScore[1]) * 100;
-
+  let percent = parseInt((splitScore[0] / splitScore[1]) * 100);
   return percent;
 };
 
