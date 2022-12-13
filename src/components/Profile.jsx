@@ -13,8 +13,8 @@ const Profile = (props) => {
   const [updatedFirstName, setUpdatedFirstName] = useState();
   const [updatedLastName, setUpdatedLastName] = useState();
   const [updatedEmail, setUpdatedEmail] = useState();
-  const [showQuiz, setShowQuiz] = useState(false)
-  const [showQuizInfo, setShowQuizInfo] = useState()
+  const [showQuiz, setShowQuiz] = useState(false);
+  const [showQuizInfo, setShowQuizInfo] = useState();
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -124,7 +124,7 @@ const Profile = (props) => {
   };
 
   const handleShowQuizzes = async () => {
-    const email = JSON.parse(localStorage.getItem('user')).email
+    const email = JSON.parse(localStorage.getItem("user")).email;
     setIsLoading(true);
     setError(null);
 
@@ -138,46 +138,52 @@ const Profile = (props) => {
         },
       }
     );
-      
+
     const json = await response.json();
-    if(!response.ok){
-    console.log(json.error)
-  }if(response.ok){
-    setShowQuizInfo(json);
-    console.log(json);
-  }
-    
-  }
+    if (!response.ok) {
+      console.log(json.error);
+    }
+    if (response.ok) {
+      setShowQuizInfo(json);
+      console.log(json);
+    }
+  };
 
   const toggleShowQuiz = () => {
-    
-    setShowQuiz(!showQuiz)
-  }
+    setShowQuiz(!showQuiz);
+  };
 
-  const isEqual = (arr) => {
-    arr.every(val => val === arr[0])
-    
-  }
-
+  const allEqual = (arr) => {
+    if (arr.length <= 1) {
+      return true;
+    } else {
+      arr.every((v) => v === arr[0]);
+    }
+  };
 
   const displayCategory = (index) => {
-    let arr = []
-    arr = showQuizInfo.map((quiz) => quiz.quizData.map((category) => {return category.category}));
-    arr = arr[index]
-    return arr
-  }
-  
+    let arr = [];
+    arr = showQuizInfo.map((quiz) =>
+      quiz.quizData.map((category) => {
+        return category.category;
+      })
+    );
+    arr = arr[index];
+    return arr;
+  };
 
   useEffect(() => {
-    handleShowQuizzes()
-  },[])
+    handleShowQuizzes();
+  }, []);
 
   return (
     <div className="profile-container">
       <div className="grid-container">
         <ul className="nav-ul nav-container">
           <div className="top-nav">
-            <li className="nav-li" onClick={toggleShowQuiz}>Quizzes</li>
+            <li className="nav-li" onClick={toggleShowQuiz}>
+              Quizzes
+            </li>
             <li onClick={toggleShowProfileInfo} className="nav-li">
               Profile Info
             </li>
@@ -272,21 +278,24 @@ const Profile = (props) => {
             )}
           </div>
         ) : null}
-        {showQuiz ? ( 
-        <div>
-           {showQuizInfo.map((quiz, index) => {
-            return(
-            <div className="quiz-score">
-              <h3>{isEqual(displayCategory(index))?displayCategory(index)[0]:'Any'}</h3>
-              <p>{CheckGoodScore(quiz.score)}%</p>
-              <p>{compareScoreFeedback(CheckGoodScore(quiz.score))}</p>
-            </div>
-            )
-           })}
-         </div>
+        {showQuiz ? (
+          <div>
+            {showQuizInfo.map((quiz, index) => {
+              return (
+                <div key={index} className="quiz-score">
+                  <p>
+                    {allEqual(displayCategory(index))
+                      ? `Category: ${displayCategory(index)[0]}`
+                      : "Category: Random"}
+                  </p>
+                  <p>{CheckGoodScore(quiz.score)}%</p>
+                  <p>{compareScoreFeedback(CheckGoodScore(quiz.score))}</p>
+                </div>
+              );
+            })}
+          </div>
         ) : null}
       </div>
-
     </div>
   );
 };
