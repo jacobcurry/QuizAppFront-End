@@ -1,5 +1,7 @@
+import { Category } from "@mui/icons-material";
 import React, { useState, useEffect } from "react";
 import Error from "../assets/Error.png";
+import { CheckGoodScore, compareScoreFeedback } from "../hooks/CheckGoodScore";
 
 const Profile = (props) => {
   const [showProfileInfo, setShowProfileInfo] = useState(false);
@@ -152,6 +154,20 @@ const Profile = (props) => {
     setShowQuiz(!showQuiz)
   }
 
+  const isEqual = (arr) => {
+    arr.every(val => val === arr[0])
+    
+  }
+
+
+  const displayCategory = (index) => {
+    let arr = []
+    arr = showQuizInfo.map((quiz) => quiz.quizData.map((category) => {return category.category}));
+    arr = arr[index]
+    return arr
+  }
+  
+
   useEffect(() => {
     handleShowQuizzes()
   },[])
@@ -256,16 +272,18 @@ const Profile = (props) => {
             )}
           </div>
         ) : null}
-        {showQuiz ? ( <div className="quiz-score">
+        {showQuiz ? ( 
+        <div>
            {showQuizInfo.map((quiz, index) => {
             return(
-            <div>
-              <p>{quiz.score}</p>
+            <div className="quiz-score">
+              <h3>{isEqual(displayCategory(index))?displayCategory(index)[0]:'Any'}</h3>
+              <p>{CheckGoodScore(quiz.score)}%</p>
+              <p>{compareScoreFeedback(CheckGoodScore(quiz.score))}</p>
             </div>
             )
            })}
-          
-          </div>
+         </div>
         ) : null}
       </div>
 
