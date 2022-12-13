@@ -283,7 +283,7 @@ const Profile = (props) => {
             {showQuizInfo.map((quiz, index) => {
               return (
                 <div key={index} className="quiz-score">
-                  <p>
+                  <p className="category">
                     {allEqual(displayCategory(index))
                       ? `Category: ${displayCategory(index)[0]}`
                       : "Category: Random"}
