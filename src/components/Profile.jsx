@@ -7,7 +7,7 @@ const Profile = (props) => {
   const [showDelete, setShowDelete] = useState(false);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
-  const [showUser, setShowUser] = useState([]);
+  const [showUser, setShowUser] = useState({});
   const [updatedFirstName, setUpdatedFirstName] = useState();
   const [updatedLastName, setUpdatedLastName] = useState();
   const [updatedEmail, setUpdatedEmail] = useState();
@@ -71,6 +71,9 @@ const Profile = (props) => {
 
     const json = await response.json();
     setShowUser(json);
+    setUpdatedEmail(json.email);
+    setUpdatedFirstName(json.firstname);
+    setUpdatedLastName(json.lastname);
   };
 
   const toggleShowProfileInfo = () => {
@@ -79,12 +82,9 @@ const Profile = (props) => {
     setShowProfileInfo(!showProfileInfo);
   };
 
-  const toggleUpdateProfileInfo = () => {
-    handleShowProfile()
-    console.log(showUser);
-    
+  const toggleUpdateProfileInfo = async () => {
+    handleShowProfile();
     setShowUpdatedProfileInfo(!showUpdatedProfileInfo);
-  
   };
 
   const handleUpdatedProfileInfo = async (e) => {
@@ -114,14 +114,10 @@ const Profile = (props) => {
     if (response.ok) {
       localStorage.removeItem("user");
       localStorage.setItem("user", JSON.stringify(json));
-      props.setCurrentUser(localStorage.getItem("user"));
+      props.setCurrentUser(JSON.parse(localStorage.getItem("user")));
       setIsLoading(false);
     }
   };
-
-  // useEffect(() => {
-  //   handleShowProfile();
-  // }, []);
 
   return (
     <div className="profile-container">

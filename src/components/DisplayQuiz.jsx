@@ -6,13 +6,14 @@ const DisplayQuiz = (props) => {
   const [correctAnswer] = useState(props.question.correct_answer);
   const [incorrectAnswers] = useState(props.question.incorrect_answers);
   const [userAnswer, setUserAnswer] = useState(null);
-  const [multipleChoiceArray, setMultipleChoiceArray] = useState();
+  const [multipleChoiceArray, setMultipleChoiceArray] = useState([]);
 
   useEffect(() => {
-    if (props.question.type === "multiple")
+    if (props.question.type === "multiple") {
       setMultipleChoiceArray(
         GenerateRandomMultipleChoice(incorrectAnswers, correctAnswer)
       );
+    }
   }, []);
 
   return (
@@ -21,7 +22,7 @@ const DisplayQuiz = (props) => {
         <div className="question-num">
           <p className="question-num-p">{props.index + 1}.</p>
           <p className="category-name">
-            <span className="category">Category: </span>{" "}
+            <span className="category">Category: </span>
             {props.question.category}
           </p>
         </div>

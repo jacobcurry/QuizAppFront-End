@@ -18,7 +18,6 @@ const Quiz = (props) => {
     setIsLoading(true);
     setError(null);
     const [response, json] = await GetQuizData(amount, category, difficulty);
-
     if (!response.ok) {
       setIsLoading(false);
       setError(json.error);
