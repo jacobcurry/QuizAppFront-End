@@ -364,3 +364,12 @@ body,
   width: 20px;
   margin-right: 1em;
 }
+
+.quiz-score {
+  background-color: white;
+  box-shadow: 4px 4px 4px var(--primary);
+  margin: 2em;
+  padding: 1em;
+  border-radius: 20px;
+  
+}
