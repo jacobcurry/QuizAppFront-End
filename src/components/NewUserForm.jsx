@@ -74,6 +74,7 @@ export default function SignUp(props) {
             backgroundColor: "white",
             padding: "1em",
             borderRadius: "20px",
+            boxShadow: "4px 4px 4px var(--primary)",
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "#1aac83" }}>

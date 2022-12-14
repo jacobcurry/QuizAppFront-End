@@ -7,17 +7,17 @@ const DisplayQuizAnswers = (props) => {
   const [multipleChoiceArray, setMultipleChoiceArray] = useState([]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     if (props.question.type === "multiple") {
       setMultipleChoiceArray(
         GenerateRandomMultipleChoice(incorrectAnswers, correctAnswer)
       );
     }
-    console.log(props.postedQuiz);
   }, []);
 
   return (
     <div className="each-quiz">
-      <div className="each-question">
+      <div className="each-question-answer">
         <div className="question-num">
           <p className="question-num-p">{props.index + 1}.</p>
           <p className="category-name">
@@ -30,36 +30,36 @@ const DisplayQuizAnswers = (props) => {
         {props.question.type === "boolean" ? (
           <div className="true-false-form">
             <div className="true-false-div">
-              <label className="boolean-title">
-                <input
-                  readOnly
-                  className="radio"
-                  name={props.index}
-                  type="radio"
-                  checked={
-                    "True" === props.userAnswerArr[props.index]
-                      ? "checked"
-                      : null
-                  }
-                />
+              <div
+                className={`showAnswerMultiple true-false-div ${
+                  "True" === correctAnswer ? "correct-answer" : ""
+                } ${
+                  "True" === props.userAnswerArr[props.index]
+                    ? "your-answer"
+                    : ""
+                }`}
+              >
                 True
-              </label>
+                {"True" === props.userAnswerArr[props.index] ? (
+                  <div className="arrow-correct">&#8592; Your Answer</div>
+                ) : null}
+              </div>
             </div>
             <div className="true-false-div">
-              <label className="boolean-title">
-                <input
-                  readOnly
-                  className="radio"
-                  name={props.index}
-                  type="radio"
-                  checked={
-                    "False" === props.userAnswerArr[props.index]
-                      ? "checked"
-                      : null
-                  }
-                />
+              <p
+                className={`showAnswerMultiple true-false-div ${
+                  "False" === correctAnswer ? "correct-answer" : ""
+                } ${
+                  "False" === props.userAnswerArr[props.index]
+                    ? "your-answer"
+                    : ""
+                }`}
+              >
                 False
-              </label>
+                {"False" === props.userAnswerArr[props.index] ? (
+                  <div className="arrow-correct">&#8592; Your Answer</div>
+                ) : null}
+              </p>
             </div>
           </div>
         ) : (
@@ -68,28 +68,18 @@ const DisplayQuizAnswers = (props) => {
               return (
                 <div
                   key={index}
-                  className={`true-false-div ${
+                  className={`showAnswerMultiple true-false-div ${
+                    answer === correctAnswer ? "correct-answer" : ""
+                  } ${
                     answer === props.userAnswerArr[props.index]
-                      ? "yourAnswer"
-                      : "falseAnswer"
+                      ? "your-answer"
+                      : ""
                   }`}
                 >
-                  <label className="boolean-title">
-                    <input
-                      readOnly
-                      name={props.index}
-                      className="radio"
-                      type="radio"
-                      checked={
-                        answer === props.userAnswerArr[props.index]
-                          ? "checked"
-                          : null
-                      }
-                    />
-
-                    {decode(answer)}
-                  </label>
-                  {answer === correctAnswer ? <div>&#8592; Correct</div> : null}
+                  <p className="answer-p">{decode(answer)}</p>
+                  {answer === props.userAnswerArr[props.index] ? (
+                    <div className="arrow-correct">&#8592; Your Answer</div>
+                  ) : null}
                 </div>
               );
             })}

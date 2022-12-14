@@ -15,6 +15,7 @@ const Profile = (props) => {
   const [updatedEmail, setUpdatedEmail] = useState();
   const [showQuiz, setShowQuiz] = useState(false);
   const [showQuizInfo, setShowQuizInfo] = useState();
+  const [showNavLinks, setShowNavlinks] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -82,12 +83,15 @@ const Profile = (props) => {
 
   const toggleShowProfileInfo = () => {
     handleShowProfile();
+    setShowQuiz(false);
     setShowUpdatedProfileInfo(false);
     setShowProfileInfo(!showProfileInfo);
   };
 
   const toggleUpdateProfileInfo = async () => {
     handleShowProfile();
+    setShowQuiz(false);
+    setShowProfileInfo(false);
     setShowUpdatedProfileInfo(!showUpdatedProfileInfo);
   };
 
@@ -141,15 +145,15 @@ const Profile = (props) => {
 
     const json = await response.json();
     if (!response.ok) {
-      console.log(json.error);
     }
     if (response.ok) {
       setShowQuizInfo(json);
-      console.log(json);
     }
   };
 
   const toggleShowQuiz = () => {
+    setShowProfileInfo(false);
+    setShowUpdatedProfileInfo(false);
     setShowQuiz(!showQuiz);
   };
 
@@ -179,28 +183,54 @@ const Profile = (props) => {
   return (
     <div className="profile-container">
       <div className="grid-container">
-        <ul className="nav-ul nav-container">
-          <div className="top-nav">
-            <li className="nav-li" onClick={toggleShowQuiz}>
-              Quizzes
-            </li>
-            <li onClick={toggleShowProfileInfo} className="nav-li">
-              Profile Info
-            </li>
-            <li className="nav-li" onClick={toggleUpdateProfileInfo}>
-              Update
-            </li>
-          </div>
-          <div>
-            <li onClick={handleLogout} className="nav-li">
-              Log Out
-            </li>
+        {/* {showNavLinks ? ( */}
+        <input type="checkbox" name="toggle" id="toggle" />
+        <label htmlFor="toggle"></label>
+        <div className="container"></div>
+        <ul className="message">
+          {/* <div
+            onClick={() => setShowNavlinks(!showNavLinks)}
+            className="menu-button"
+          >
+            ☰
+          </div> */}
+          <li
+            className={`nav-li ${showQuiz ? "selected" : ""}`}
+            onClick={toggleShowQuiz}
+          >
+            Quizzes
+          </li>
+          <li
+            onClick={toggleShowProfileInfo}
+            className={`nav-li ${showProfileInfo ? "selected" : ""}`}
+          >
+            Profile Info
+          </li>
+          <li
+            className={`nav-li ${showUpdatedProfileInfo ? "selected" : ""}`}
+            onClick={toggleUpdateProfileInfo}
+          >
+            Update
+          </li>
 
-            <li onClick={toggleShowDelete} className="delete-account">
-              Delete Account
-            </li>
-          </div>
+          <li onClick={handleLogout} className="nav-li">
+            Log Out
+          </li>
+
+          <li onClick={toggleShowDelete} className="delete-account-li nav-li">
+            Delete Account
+          </li>
         </ul>
+        {/* ) : (
+          <ul className="nav-container">
+            <div
+              onClick={() => setShowNavlinks(!showNavLinks)}
+              className="menu-button"
+            >
+              ☰
+            </div>
+          </ul>
+        )} */}
 
         {showDelete ? (
           <div className="modal-backdrop">

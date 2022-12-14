@@ -57,11 +57,7 @@ export default function SignIn(props) {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container
-        className="position-absolute top-50 start-50 translate-middle"
-        component="main"
-        maxWidth="xs"
-      >
+      <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
@@ -69,9 +65,10 @@ export default function SignIn(props) {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            backgroundColor: "white",
             padding: "1em",
             borderRadius: "20px",
+            backgroundColor: "white",
+            boxShadow: "4px 4px 4px var(--primary)",
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "#1aac83" }}>

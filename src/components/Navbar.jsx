@@ -3,32 +3,34 @@ import { Link } from "react-router-dom";
 
 const Navbar = (props) => {
   return (
-    <header className="header">
+    <div className="header">
       <Link className="home-link" to="/">
-        <h1 className="quiz-title">Quiz</h1>
+        <h1 className="quiz-title">
+          ex<span className="title-color">QUIZ</span>ite
+        </h1>
       </Link>
-      <nav className="nav">
-        <div className="nav-container">
+      <nav className="nav-header">
+        <div className="header-nav-container">
           {props.currentUser ? (
             <div className="auth-div">
-              <p className="email-p">{props.currentUser.email}</p>
+              <p className="hidden email-p">{props.currentUser.email}</p>
               <Link to="/profile" className="btn">
                 Profile
               </Link>
             </div>
           ) : (
-            <div className="auth-div">
+            <div className="auth-div ">
               <Link className="auth-link" to="/login">
                 Login
               </Link>
-              <Link className="auth-link" to="/signup">
+              <Link className="auth-link hidden-2" to="/signup">
                 Sign up
               </Link>
             </div>
           )}
         </div>
       </nav>
-    </header>
+    </div>
   );
 };
 

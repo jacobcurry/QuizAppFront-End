@@ -10,9 +10,9 @@ export const CheckGoodScore = (score) => {
 export const compareScoreFeedback = (score) => {
   if (score <= 40) {
     return "Wow, that's bad you need some more practice, take another quiz!";
-  } else if (40 < score < 80) {
+  } else if (score > 40 && score < 80) {
     return "Pretty good score but, you should keep practicing!";
-  } else if (80 <= score <= 90) {
+  } else if (score >= 80 && score <= 90) {
     return "Good job, try to top that!";
   } else {
     return "Great job, thats one of the best scores all day!";

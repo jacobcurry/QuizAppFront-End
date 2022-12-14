@@ -88,6 +88,7 @@ const Quiz = (props) => {
       console.log(json.error);
     }
     if (response.ok) {
+      setIsLoading(false);
       setPostedQuiz(json);
       setDisplayQuiz(false);
       setShowQuizScore(true);
@@ -113,86 +114,99 @@ const Quiz = (props) => {
     }
   };
 
+  const handleAnotherQuizBtn = () => {
+    setCorrectAnswersArr([]);
+    setUserAnswerArr([]);
+    setScore();
+    setMissedQuestions([]);
+    setShowQuizScore(false);
+    setShowForm(true);
+  };
+
   return (
     <div>
       {ShowForm ? (
-        <form onSubmit={handleFormSubmit}>
-          <label htmlFor="numQuestions">Number of Questions:</label>
-          <input
-            name="numQuestions"
-            type="number"
-            min={1}
-            max={50}
-            defaultValue={10}
-            onChange={(e) => setAmount(e.target.value)}
-          />
-          <label htmlFor="category">Select a Category</label>
-          <select
-            onChange={(e) => {
-              setCategory(e.target.value);
-            }}
-            name="category"
-            className=""
-          >
-            <option value="any">Any Category</option>
-            <option value="9">General Knowledge</option>
-            <option value="10">Entertainment: Books</option>
-            <option value="11">Entertainment: Film</option>
-            <option value="12">Entertainment: Music</option>
-            <option value="13">Entertainment: Musicals &amp; Theatres</option>
-            <option value="14">Entertainment: Television</option>
-            <option value="15">Entertainment: Video Games</option>
-            <option value="16">Entertainment: Board Games</option>
-            <option value="17">Science &amp; Nature</option>
-            <option value="18">Science: Computers</option>
-            <option value="19">Science: Mathematics</option>
-            <option value="20">Mythology</option>
-            <option value="21">Sports</option>
-            <option value="22">Geography</option>
-            <option value="23">History</option>
-            <option value="24">Politics</option>
-            <option value="25">Art</option>
-            <option value="26">Celebrities</option>
-            <option value="27">Animals</option>
-            <option value="28">Vehicles</option>
-            <option value="29">Entertainment: Comics</option>
-            <option value="30">Science: Gadgets</option>
-            <option value="31">
-              Entertainment: Japanese Anime &amp; Manga
-            </option>
-            <option value="32">Entertainment: Cartoon &amp; Animations</option>{" "}
-          </select>
-          <label htmlFor="difficulty"></label>
-          <select
-            onChange={(e) => {
-              setDifficulty(e.target.value);
-            }}
-            name="difficulty"
-            className=""
-          >
-            <option value="any">Any Difficulty</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-          </select>
-          <button
-            disabled={isLoading ? true : false}
-            className="btn"
-            type="submit"
-          >
-            Take Quiz
-          </button>
-          {isLoading ? <div className="loader"></div> : ""}
-          {error && (
-            <div className="error-msg">
-              <img className="error-img" src={Error} alt="error" />
-              <p> {error}</p>
-            </div>
-          )}
-        </form>
+        <div className="quiz-param-div">
+          <form className="quiz-param-form" onSubmit={handleFormSubmit}>
+            <label htmlFor="numQuestions">Number of Questions:</label>
+            <input
+              name="numQuestions"
+              type="number"
+              min={1}
+              max={50}
+              defaultValue={10}
+              onChange={(e) => setAmount(e.target.value)}
+            />
+            <label htmlFor="category">Select a Category</label>
+            <select
+              onChange={(e) => {
+                setCategory(e.target.value);
+              }}
+              name="category"
+              className=""
+            >
+              <option value="any">Any Category</option>
+              <option value="9">General Knowledge</option>
+              <option value="10">Entertainment: Books</option>
+              <option value="11">Entertainment: Film</option>
+              <option value="12">Entertainment: Music</option>
+              <option value="13">Entertainment: Musicals &amp; Theatres</option>
+              <option value="14">Entertainment: Television</option>
+              <option value="15">Entertainment: Video Games</option>
+              <option value="16">Entertainment: Board Games</option>
+              <option value="17">Science &amp; Nature</option>
+              <option value="18">Science: Computers</option>
+              <option value="19">Science: Mathematics</option>
+              <option value="20">Mythology</option>
+              <option value="21">Sports</option>
+              <option value="22">Geography</option>
+              <option value="23">History</option>
+              <option value="24">Politics</option>
+              <option value="25">Art</option>
+              <option value="26">Celebrities</option>
+              <option value="27">Animals</option>
+              <option value="28">Vehicles</option>
+              <option value="29">Entertainment: Comics</option>
+              <option value="30">Science: Gadgets</option>
+              <option value="31">
+                Entertainment: Japanese Anime &amp; Manga
+              </option>
+              <option value="32">
+                Entertainment: Cartoon &amp; Animations
+              </option>{" "}
+            </select>
+            <label htmlFor="difficulty">Select a Difficulty</label>
+            <select
+              onChange={(e) => {
+                setDifficulty(e.target.value);
+              }}
+              name="difficulty"
+              className=""
+            >
+              <option value="any">Any Difficulty</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+            <button
+              disabled={isLoading ? true : false}
+              className="btn quiz-form-btn"
+              type="submit"
+            >
+              Take Quiz
+            </button>
+            {isLoading ? <div className="loader"></div> : ""}
+            {error && (
+              <div className="error-msg">
+                <img className="error-img" src={Error} alt="error" />
+                <p> {error}</p>
+              </div>
+            )}
+          </form>
+        </div>
       ) : null}
       {displayQuiz ? (
-        <form onSubmit={checkUserAnswers}>
+        <form className="quiz-form" onSubmit={checkUserAnswers}>
           {quizData.map((question, index) => {
             return (
               <DisplayQuiz
@@ -207,7 +221,15 @@ const Quiz = (props) => {
               />
             );
           })}
-          <button className="btn quiz-submit">Submit Quiz</button>
+          <div className="quiz-btm-margin">
+            <button className="btn quiz-submit">Submit Quiz</button>
+            {missedQuestions.length > 0 ? (
+              <div className="error-msg-quiz">
+                <img className="error-img" src={Error} alt="error" />
+                <p>Please answer all questions</p>
+              </div>
+            ) : null}
+          </div>
         </form>
       ) : null}
       {checkAnswers ? (
@@ -233,20 +255,35 @@ const Quiz = (props) => {
       ) : null}
       {showQuizScore ? (
         <div>
-          <p>Your Quiz Results</p>
-          <p>{CheckGoodScore(score)}%</p>
-          <p>{compareScoreFeedback(CheckGoodScore(score))}</p>
-          {quizData.map((question, index) => {
-            return (
-              <DisplayQuizAnswers
-                key={index}
-                index={index}
-                question={question}
-                postedQuiz={postedQuiz}
-                userAnswerArr={userAnswerArr}
-              />
-            );
-          })}
+          <div className="feedback-div">
+            <p className="quiz-results-p">Your Quiz Results</p>
+            <hr />
+            <p className="score-p">{CheckGoodScore(score)}% Correct</p>
+            <p className="score-feedback-p">
+              {compareScoreFeedback(CheckGoodScore(score))}
+            </p>
+          </div>
+          <div className="quiz-data-display">
+            {quizData.map((question, index) => {
+              return (
+                <DisplayQuizAnswers
+                  key={index}
+                  index={index}
+                  question={question}
+                  postedQuiz={postedQuiz}
+                  userAnswerArr={userAnswerArr}
+                />
+              );
+            })}
+            <div className="another-quiz-div">
+              <button
+                onClick={handleAnotherQuizBtn}
+                className="btn another-quiz-btn"
+              >
+                Take Another Quiz
+              </button>
+            </div>
+          </div>
         </div>
       ) : null}
     </div>
