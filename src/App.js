@@ -19,7 +19,6 @@ const App = () => {
 
   const updateUser = (user) => {
     setCurrentUser(JSON.parse(localStorage.getItem("user")));
-    console.log(currentUser);
   };
 
   useEffect(() => {

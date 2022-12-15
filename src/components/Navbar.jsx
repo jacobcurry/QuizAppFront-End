@@ -2,6 +2,12 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Navbar = (props) => {
+  const checkLocation = () => {
+    if (window.location.pathname === "/profile") {
+      window.location.reload();
+    }
+  };
+
   return (
     <div className="header">
       <Link className="home-link" to="/">
@@ -14,13 +20,13 @@ const Navbar = (props) => {
           {props.currentUser ? (
             <div className="auth-div">
               <p className="hidden email-p">{props.currentUser.email}</p>
-              <Link to="/profile" className="btn">
+              <Link onClick={checkLocation} to="/profile" className="btn">
                 Profile
               </Link>
             </div>
           ) : (
             <div className="auth-div ">
-              <Link className="auth-link" to="/login">
+              <Link className="auth-link hidden-2" to="/login">
                 Login
               </Link>
               <Link className="auth-link hidden-2" to="/signup">
